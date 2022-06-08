@@ -59,11 +59,10 @@ open Field
 --------------------------------------------------------------------
 ------------ FPS with natural coefficients -------------------------
 
-fpsid : ℕ → ℕ
-fpsid n = n
+nvn : ℕ → ℕ
+nvn n = n
 
-fps1 : ℕ → ℕ
-fps1 n = 1
+
 
 data FPS (ℕ : Set) : Set where
      Fps : (ℕ → ℕ) → FPS ℕ
@@ -74,11 +73,9 @@ to-function : FPS ℕ → (ℕ → ℕ)
 to-function (Fps f) = f
 
 
-identiteta : FPS ℕ
-identiteta = Fps fpsid
+fps1 : FPS ℕ
+fps1 = Fps nvn
 
-enice : FPS ℕ
-enice = Fps fps1
 
 
 -------------------- ADDITION ------------------------------------------
@@ -87,6 +84,22 @@ enice = Fps fps1
 
 _+'_ : (f g : ℕ → ℕ) → ℕ → ℕ
 (f +' g) n = f n + g n
+
+-- addition of two power series
+_+ᶠ_ : FPS ℕ → FPS ℕ → FPS ℕ
+Fps f +ᶠ Fps g = Fps (f +' g)
+
+-- zero element
+enice : ℕ → ℕ
+enice n = 1
+
+0ᶠ : FPS ℕ
+0ᶠ = Fps enice
+
+
+-- additive inverse (cannot make it for ℕ but it is -f)
+-ᶠ_ : FPS ℕ → FPS ℕ
+-ᶠ Fps f = {!   !}
 
 -- commutativity for +' for every n
 +'-comm' : (f g : ℕ → ℕ)  → ∀ (n : ℕ) → (f +' g) n ≡ (g +' f) n
@@ -106,10 +119,6 @@ _+'_ : (f g : ℕ → ℕ) → ℕ → ℕ
 +'-comm f g = fun-ext (+'-comm' f g)
 
 
--- addition of two power series
-_+ᶠ_ : FPS ℕ → FPS ℕ → FPS ℕ
-Fps f +ᶠ Fps g = Fps (f +' g)
-
 -- commutativity for power series addition
 +ᶠ-comm : (F G : FPS ℕ) → F +ᶠ G ≡ G +ᶠ F
 +ᶠ-comm (Fps f) (Fps g) =
@@ -126,7 +135,7 @@ Fps f +ᶠ Fps g = Fps (f +' g)
 
 -- test
 vsota : FPS ℕ
-vsota = identiteta +ᶠ enice
+vsota = fps1 +ᶠ 0ᶠ
 
 
 ------------------- MULTIPLICATION ------------------------------------
@@ -143,53 +152,81 @@ multiply f g n = sum f g 0 n
 _·ᶠ_ : FPS ℕ → FPS ℕ → FPS ℕ
 (Fps f) ·ᶠ (Fps g) = Fps (multiply f g)
 
-sum-comm' : (f g : ℕ → ℕ) → ∀ (n : ℕ) → sum f g 0 n ≡ sum g f 0 n
-sum-comm' f g 0 =
-    begin
-        sum f g 0 0
-    ≡⟨⟩
-        f 0 * g 0
-    ≡⟨ *-comm (f 0) (g 0) ⟩
-        g 0 * f 0
-    ≡⟨⟩
-        sum g f 0 0
-    ∎
-sum-comm' f g (suc n) =
-    begin
-        sum f g 0 (suc n)
-    ≡⟨⟩
-        (f(suc n) * g(0)) + sum f g (suc 0) n
-    ≡⟨ {!   !} ⟩
-        {!   !}
+
+-- multiplicative identity
+multident : ℕ → ℕ
+multident 0 = 1
+multident (suc n) = 0
+
+1ᶠ : FPS ℕ
+1ᶠ = Fps multident
+
+-- commutativity of multiplication not needed for algebra
+-- also problems because sum is not defined in the best way
+-- sum-comm' : (f g : ℕ → ℕ) → ∀ (n : ℕ) → sum f g 0 n ≡ sum g f 0 n
+-- sum-comm' f g 0 =
+--     begin
+--         sum f g 0 0
+--     ≡⟨⟩
+--         f 0 * g 0
+--     ≡⟨ *-comm (f 0) (g 0) ⟩
+--         g 0 * f 0
+--     ≡⟨⟩
+--         sum g f 0 0
+--     ∎
+-- sum-comm' f g (suc n) =
+--     begin
+--         sum f g 0 (suc n)
+--     ≡⟨⟩
+--         (f(suc n) * g(0)) + sum f g (suc 0) n
+--     ≡⟨ {!   !} ⟩
+--         {!   !}
 
 
+-- sum-comm : (f g : ℕ → ℕ) → sum f g 0 ≡ sum g f 0
+-- sum-comm f g = fun-ext (sum-comm' f g)
 
 
-sum-comm : (f g : ℕ → ℕ) → sum f g 0 ≡ sum g f 0
-sum-comm f g = fun-ext (sum-comm' f g)
-
-
-·ᶠ-comm : (F G : FPS ℕ) → F ·ᶠ G ≡ G ·ᶠ F
-·ᶠ-comm (Fps f) (Fps g) =
-    begin
-        (Fps f ·ᶠ Fps g)
-    ≡⟨⟩
-        Fps (multiply f g)
-    ≡⟨⟩
-        Fps (sum f g 0)
-    ≡⟨ cong Fps (sum-comm f g) ⟩
-        Fps (sum g f 0)
-    ≡⟨⟩
-        Fps (multiply g f)
-    ≡⟨⟩
-        (Fps g ·ᶠ Fps f)
-    ∎
+-- ·ᶠ-comm : (F G : FPS ℕ) → F ·ᶠ G ≡ G ·ᶠ F
+-- ·ᶠ-comm (Fps f) (Fps g) =
+--     begin
+--         (Fps f ·ᶠ Fps g)
+--     ≡⟨⟩
+--         Fps (multiply f g)
+--     ≡⟨⟩
+--         Fps (sum f g 0)
+--     ≡⟨ cong Fps (sum-comm f g) ⟩
+--         Fps (sum g f 0)
+--     ≡⟨⟩
+--         Fps (multiply g f)
+--     ≡⟨⟩
+--         (Fps g ·ᶠ Fps f)
+--     ∎
 
 
 
 -- test
 produkt : FPS ℕ
-produkt = identiteta ·ᶠ enice
+produkt = fps1 ·ᶠ 0ᶠ
 
 produkt-rezultat : ℕ → ℕ
-produkt-rezultat n = (to-function produkt) n          
+produkt-rezultat n = (to-function produkt) n
+
+identitytest : FPS ℕ
+identitytest = fps1 ·ᶠ 1ᶠ
+
+idtest : ℕ → ℕ
+idtest n = (to-function identitytest) n
+
+
+
+
+
+-------------------FORMAL DIFFERENTIATION-------------------------
+
+diff : (f : ℕ → ℕ) → ℕ → ℕ
+diff f n = f (suc n) * (suc n)
+
+D_ : FPS ℕ → FPS ℕ
+D Fps f = Fps (diff f)
+
