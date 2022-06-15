@@ -317,22 +317,18 @@ shift-suc (suc n) k =
         (*ᵢ n (suc k) (deriv x) y +ₐ (toA (suc (suc n)) *ₐ x (suc (suc n)) *ₐ y k +ₐ (*ᵢ n (suc k) x (deriv y) +ₐ x (suc n) *ₐ (toA(suc k) *ₐ y (suc k))))) +ₐ toA k *ₐ x (suc (suc n)) *ₐ y k
     ≈⟨ +ₐ-cong (+ₐ-cong ≈ₐ-refl (+ₐ-comm (toA (suc (suc n)) *ₐ x (suc (suc n)) *ₐ y k) (*ᵢ n (suc k) x (deriv y) +ₐ x (suc n) *ₐ (toA(suc k) *ₐ y (suc k))))) ≈ₐ-refl ⟩
         (*ᵢ n (suc k) (deriv x) y +ₐ (*ᵢ n (suc k) x (deriv y) +ₐ x (suc n) *ₐ (toA(suc k) *ₐ y (suc k)) +ₐ toA (suc (suc n)) *ₐ x (suc (suc n)) *ₐ y k)) +ₐ toA k *ₐ x (suc (suc n)) *ₐ y k
-    ≈⟨ +ₐ-cong (≈ₐ-sym $ {! +ₐ-assoc  !}) ≈ₐ-refl ⟩
-        (*ᵢ n (suc k) (deriv x) y +ₐ *ᵢ n (suc k) x (deriv y) +ₐ x (suc n) *ₐ (toA(suc k) *ₐ y (suc k)) +ₐ toA (suc (suc n)) *ₐ x (suc (suc n)) *ₐ y k) +ₐ toA k *ₐ x (suc (suc n)) *ₐ y k
-    ≈⟨ {!   !} ⟩
-        (*ᵢ n (suc k) (deriv x) y +ₐ ((*ᵢ n (suc k) x (deriv y) +ₐ toA (suc k) *ₐ x (suc n) *ₐ y (suc k)) +ₐ toA (suc (suc n)) *ₐ (x (suc (suc n)) *ₐ y k))) +ₐ toA k *ₐ (x (suc (suc n)) *ₐ y k)
-    ≈⟨ +ₐ-cong (≈ₐ-sym $ {!   !}) ≈ₐ-refl ⟩
-        (*ᵢ n (suc k) (deriv x) y +ₐ *ᵢ n (suc k) x (deriv y) +ₐ toA (suc k) *ₐ x (suc n) *ₐ y (suc k) +ₐ toA (suc (suc n)) *ₐ (x (suc (suc n)) *ₐ y k)) +ₐ toA k *ₐ (x (suc (suc n)) *ₐ y k)
-    ≈⟨ {!   !} ⟩
-        (*ᵢ n (suc k) (deriv x) y +ₐ ((*ᵢ n (suc k) x (deriv y) +ₐ toA (suc k) *ₐ x (suc n) *ₐ y (suc k) +ₐ toA (suc (suc n))) *ₐ (x (suc (suc n)) *ₐ y k))) +ₐ toA k *ₐ (x (suc (suc n)) *ₐ y k)
-    ≈⟨ +ₐ-cong (≈ₐ-sym $ {! +ₐ-assoc  !}) ≈ₐ-refl ⟩
-        {!     !}
-    ≈⟨ {!   !} ⟩
+    ≈⟨ +ₐ-cong (≈ₐ-sym $ +ₐ-assoc (*ᵢ n (suc k) (deriv x) y) (*ᵢ n (suc k) x (deriv y) +ₐ x (suc n) *ₐ (toA(suc k) *ₐ y (suc k))) (toA (suc (suc n)) *ₐ x (suc (suc n)) *ₐ y k)) ≈ₐ-refl ⟩
+        ((*ᵢ n (suc k) (deriv x) y +ₐ (*ᵢ n (suc k) x (deriv y) +ₐ x (suc n) *ₐ (toA(suc k) *ₐ y (suc k)))) +ₐ toA (suc (suc n)) *ₐ x (suc (suc n)) *ₐ y k) +ₐ toA k *ₐ x (suc (suc n)) *ₐ y k
+    ≈⟨ +ₐ-cong (+ₐ-cong (≈ₐ-sym $ +ₐ-assoc (*ᵢ n (suc k) (deriv x) y) (*ᵢ n (suc k) x (deriv y)) (x (suc n) *ₐ (toA(suc k) *ₐ y (suc k)))) (*ₐ-assoc (toA (suc (suc n))) (x (suc (suc n))) (y k))) (*ₐ-assoc (toA k) (x (suc (suc n))) (y k)) ⟩
+        ((*ᵢ n (suc k) (deriv x) y +ₐ *ᵢ n (suc k) x (deriv y) +ₐ x (suc n) *ₐ (toA(suc k) *ₐ y (suc k))) +ₐ toA (suc (suc n)) *ₐ (x (suc (suc n)) *ₐ y k)) +ₐ toA k *ₐ (x (suc (suc n)) *ₐ y k)
+    ≈⟨ +ₐ-cong (+ₐ-cong (+ₐ-cong ≈ₐ-refl (≈ₐ-sym $ *ₐ-assoc (x (suc n)) (toA(suc k)) (y (suc k)))) ≈ₐ-refl) ≈ₐ-refl ⟩
+        ((*ᵢ n (suc k) (deriv x) y +ₐ *ᵢ n (suc k) x (deriv y) +ₐ x (suc n) *ₐ toA(suc k) *ₐ y (suc k)) +ₐ toA (suc (suc n)) *ₐ (x (suc (suc n)) *ₐ y k)) +ₐ toA k *ₐ (x (suc (suc n)) *ₐ y k)
+    ≈⟨ +ₐ-cong (+ₐ-cong (+ₐ-cong ≈ₐ-refl (*ₐ-cong (*ₐ-comm (x (suc n)) (toA(suc k))) ≈ₐ-refl)) ≈ₐ-refl) ≈ₐ-refl ⟩
         ((*ᵢ n (suc k) (deriv x) y +ₐ *ᵢ n (suc k) x (deriv y) +ₐ toA (suc k) *ₐ x (suc n) *ₐ y (suc k)) +ₐ toA (suc (suc n)) *ₐ (x (suc (suc n)) *ₐ y k)) +ₐ toA k *ₐ (x (suc (suc n)) *ₐ y k)
     ≈⟨ +ₐ-assoc (*ᵢ n (suc k) (deriv x) y +ₐ *ᵢ n (suc k) x (deriv y) +ₐ toA (suc k) *ₐ x (suc n) *ₐ y (suc k)) (toA (suc (suc n)) *ₐ (x (suc (suc n)) *ₐ y k)) (toA k *ₐ (x (suc (suc n)) *ₐ y k)) ⟩
         *ᵢ n (suc k) (deriv x) y +ₐ *ᵢ n (suc k) x (deriv y) +ₐ toA (suc k) *ₐ x (suc n) *ₐ y (suc k) +ₐ (toA (suc (suc n)) *ₐ (x (suc (suc n)) *ₐ y k) +ₐ toA k *ₐ (x (suc (suc n)) *ₐ y k))
     ≈⟨ +ₐ-cong ≈ₐ-refl (≈ₐ-sym $ distribʳₐ (x (suc (suc n)) *ₐ y k) (toA (suc (suc n))) (toA k)) ⟩
-        (*ᵢ n (suc k) (deriv x) y +ₐ *ᵢ n (suc k) x (deriv y) +ₐ toA (suc k) *ₐ x (suc n) *ₐ y (suc k)) +ₐ (toA (suc (suc n)) +ₐ toA k ) *ₐ (x (suc (suc n)) *ₐ y k)
+        *ᵢ n (suc k) (deriv x) y +ₐ *ᵢ n (suc k) x (deriv y) +ₐ toA (suc k) *ₐ x (suc n) *ₐ y (suc k) +ₐ (toA (suc (suc n)) +ₐ toA k ) *ₐ (x (suc (suc n)) *ₐ y k)
     ≈⟨ +ₐ-cong (*ᵢ-leibniz n (suc k) x y) ≈ₐ-refl ⟩
         (toA (suc n) +ₐ toA(suc k)) *ₐ (*ᵢ (suc n) (suc k) x y) +ₐ (toA (suc (suc n)) +ₐ toA k) *ₐ (x (suc (suc n)) *ₐ y k)
     ≈⟨ +ₐ-cong (*ₐ-cong (shift-suc (suc n) k) ≈ₐ-refl) ≈ₐ-refl ⟩
@@ -344,20 +340,21 @@ shift-suc (suc n) k =
     ∎
 
 -- helper function: multiplying by 0
-minus : (a : A) → -ₐ (1ₐ *ₐ a) ≈ₐ -ₐ 1ₐ *ₐ a
-minus a = {!   !}
-
 multi0 : (a : A) → 0ₐ ≈ₐ 0ₐ *ₐ a
 multi0 a =
     begin
         0ₐ
-    ≈⟨ ≈ₐ-sym $ -ₐ‿inverseʳ (1ₐ *ₐ a) ⟩
-        ((1ₐ *ₐ a) +ₐ -ₐ (1ₐ *ₐ a))
-    ≈⟨ +ₐ-cong ≈ₐ-refl (minus a) ⟩
-        (1ₐ *ₐ a) +ₐ (-ₐ 1ₐ *ₐ a)
-    ≈⟨ ≈ₐ-sym $ distribʳₐ a 1ₐ (-ₐ 1ₐ) ⟩
-        (1ₐ +ₐ -ₐ 1ₐ) *ₐ a
-    ≈⟨ *ₐ-cong (-ₐ‿inverseʳ 1ₐ) ≈ₐ-refl ⟩
+    ≈⟨ (≈ₐ-sym $ -ₐ‿inverseʳ (0ₐ *ₐ a)) ⟩
+        (0ₐ *ₐ a) +ₐ -ₐ (0ₐ *ₐ a)
+    ≈⟨ +ₐ-cong (*ₐ-cong (≈ₐ-sym (+ₐ-identityʳ 0ₐ)) ≈ₐ-refl) ≈ₐ-refl ⟩
+        ((0ₐ +ₐ 0ₐ) *ₐ a) +ₐ -ₐ (0ₐ *ₐ a)
+    ≈⟨ +ₐ-cong (distribʳₐ a 0ₐ 0ₐ) ≈ₐ-refl ⟩
+        (0ₐ *ₐ a) +ₐ (0ₐ *ₐ a) +ₐ -ₐ (0ₐ *ₐ a)
+    ≈⟨ +ₐ-assoc (0ₐ *ₐ a) (0ₐ *ₐ a) (-ₐ (0ₐ *ₐ a)) ⟩
+        (0ₐ *ₐ a) +ₐ ((0ₐ *ₐ a) +ₐ -ₐ (0ₐ *ₐ a))
+    ≈⟨ +ₐ-cong ≈ₐ-refl (-ₐ‿inverseʳ (0ₐ *ₐ a)) ⟩
+        (0ₐ *ₐ a) +ₐ 0ₐ
+    ≈⟨ +ₐ-identityʳ (0ₐ *ₐ a) ⟩
         0ₐ *ₐ a
     ∎
 
