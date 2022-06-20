@@ -10,8 +10,6 @@ This repository is set up as an Agda library and it contains:
 
 * `agda-stdlib/`: Agda standard library as a git submodule
 
-* `agda-categories/`: Agda categories library as a git submodule
-
 * `project/`: the top-level source code directory for our Agda code
 
   * `project/PowerSeries.agda` contains implementation of formal power series and operations on them, together with proofs of their properties.
